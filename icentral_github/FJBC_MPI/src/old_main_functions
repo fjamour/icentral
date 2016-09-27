@@ -1,0 +1,1997 @@
+//void fill_test_graph(graph_t& graph)
+//{
+//    graph.init_size(20);
+//    graph.insert_edge(0,1);
+//    graph.insert_edge(1,2);
+//    graph.insert_edge(2,3);
+//    graph.insert_edge(3,0);
+//    graph.insert_edge(0,4);
+//    graph.insert_edge(4,5);
+//    graph.insert_edge(5,6);
+//    graph.insert_edge(6,7);
+//    graph.insert_edge(7,8);
+//    graph.insert_edge(8,4);
+//    graph.insert_edge(5,9);
+//    graph.insert_edge(9,8);
+//    graph.insert_edge(3,10);
+//    graph.insert_edge(10,11);
+//    graph.insert_edge(11,12);
+//    graph.insert_edge(12,13);
+//    graph.insert_edge(13,14);
+//    graph.insert_edge(14,15);
+//    graph.insert_edge(15,10);
+//    graph.insert_edge(2,16);
+//    graph.insert_edge(16,17);
+//    graph.insert_edge(17,18);
+//    graph.insert_edge(2,19);
+//}
+
+void test_graph_t()
+{
+    //init graph with 5 nodes, star shaped
+    graph_t graph;
+    graph.init_size(6);
+    graph.insert_edge(0,1);
+    graph.insert_edge(0,2);
+    graph.insert_edge(1,3);
+    graph.insert_edge(2,3);
+    graph.insert_edge(3,4);
+    graph.insert_edge(3,5);
+    graph.insert_edge(3,5);
+    
+    for(int i = 0; i < graph.size(); i++) {
+        vector<node_id_t> nbrs_vec = graph.get_nbrs(i);
+        for(vector<node_id_t>::iterator it = nbrs_vec.begin(); it != nbrs_vec.end(); ++it) {
+            cout << "Source: " << i << "\tDest: " << (*it) << endl;
+        }
+    }
+ 
+}
+
+void test_naive_bc()
+{
+    graph_t graph;
+//    graph.init_size(7);
+//    graph.insert_edge(0,1);
+//    graph.insert_edge(0,2);
+//    graph.insert_edge(1,3);
+//    graph.insert_edge(2,3);
+//    graph.insert_edge(3,4);
+//    graph.insert_edge(3,5);
+    graph.init_size(8);
+    graph.insert_edge(0,7);
+    graph.insert_edge(7,1);
+    graph.insert_edge(0,2);
+    graph.insert_edge(0,3);
+    graph.insert_edge(0,4);
+    graph.insert_edge(0,5);
+    graph.insert_edge(6,1);
+    graph.insert_edge(6,2);
+    graph.insert_edge(6,3);
+    graph.insert_edge(6,4);
+    graph.insert_edge(6,5);
+
+    
+
+    vector<double> bc_vec = naive_betweenness_centrality(graph);
+    
+    for(int i = 0; i < graph.size(); ++i) {
+        cout << "BC of " << i << " is: " << bc_vec[i] << endl;
+    }
+}
+
+void test_graph_reader()
+{
+    ofstream fout;
+    fout.open("tmp_out", ios::out);
+    fout << 5 << " " << 5 << endl;
+    fout << 0 << " " << 1 << endl;
+    fout << 0 << " " << 2 << endl;
+    fout << 0 << " " << 3 << endl;
+    fout << 0 << " " << 4 << endl;
+    fout << 2 << " " << 3 << endl;
+    fout.close();
+    
+    graph_t graph;
+    graph.read_graph(string("tmp_out"));
+    graph.print_edgelist();
+    
+}
+
+struct bc_comp_t
+{
+    bool operator()(const pair<int, double>& p1, const pair<int, double>& p2) {
+        return p1.second >= p2.second;
+    }
+} bc_comp;
+
+void misc_test()
+{
+    graph_t graph;
+    graph.read_graph(string("rand_graph"));
+    //graph.print_edgelist();
+    
+//    vector<double> bc_vec = naive_betweenness_centrality(graph);
+    vector<double> bc_vec = brandes_betweenness_centrality(graph);
+    
+    list<pair<int, double> > bc_sorted;
+    for(int i = 0; i < graph.size(); ++i) {
+        bc_sorted.push_back(make_pair(i, bc_vec[i]));
+        
+    }
+    bc_sorted.sort(bc_comp);
+    for(list<pair<int, double> >::iterator it = bc_sorted.begin(); it != bc_sorted.end(); it++) {
+        cout << "BC of " << it->first << " is: " << it->second << endl;
+    }
+    
+}
+
+void leda_test_mcb() {
+    //init graph with 5 nodes, star shaped
+    graph_t graph;
+    fill_test_graph(graph);
+
+    graph.find_mucs();
+    graph.print_mcbs();
+}
+
+void test_graph_hash()
+{
+    graph_hash_t g;
+    g.insert_edge(1, 2);
+    g.insert_edge(2, 1);
+    g.insert_edge(1, 2);
+    g.insert_edge(1, 2);
+    g.insert_edge(1, 2);
+    g.insert_node(5);
+    g.insert_edge(5,6);
+    g.insert_edge(6, 10);
+    g.print_graph();
+}
+
+void test_muc_find()
+{
+    graph_t graph;
+    fill_test_graph(graph);
+    
+    //graph.insert_edge(17, 19);
+
+    graph.find_mucs();
+    graph.print_mucs();
+    graph.print_node_to_muc();
+    
+    
+    //graph.tmp_fun();
+}
+
+void test_path_find()
+{
+    graph_t graph;
+    fill_test_graph(graph);
+
+    vector<node_id_t> path;
+    node_id_t src, dst;
+    src = 1; dst = 9;
+    graph.get_shortest_path(src, dst, path);
+    printf("[%d]", path[0]);
+    for(int i = 1; i < path.size(); ++i) {
+        printf("==[%d]", path[i]);
+    }
+}
+
+void test_muc_update()
+{
+    graph_t graph;
+    fill_test_graph(graph);
+
+    graph.find_mucs();
+    graph.print_mucs();
+    
+    graph.insert_edge_update_muc(3, 8);
+//    graph.insert_edge_update_muc(17, 19);
+//    graph.insert_edge_update_muc(18, 14);
+//    graph.insert_edge_update_muc(18,16);
+//    graph.insert_edge_update_muc(17,19);
+    graph.insert_edge_update_muc(0,2);
+    cout << "######################################" << endl;
+    graph.print_mucs();
+}
+
+void test_conn_comp_count()
+{
+    graph_hash_t g;
+    g.insert_node(1);
+    g.insert_node(2);
+    g.insert_node(3);
+    g.insert_node(4);
+    
+    g.insert_edge(1,2);
+    g.insert_edge(2,3);
+
+    vector<int> size_vec;
+    g.conn_comp_sizes(size_vec);
+    for(int i = 0; i < size_vec.size(); ++i) {
+        printf("Component [%d] has size [%d]\n", i, size_vec[i]);
+    }
+}
+
+void test_qube_brandes_toy_graph()
+{
+    graph_t graph;
+    fill_test_graph(graph);
+    //graph.insert_edge(3,8);
+    
+    graph.find_mucs();
+    //graph.print_mcbs();
+    graph.print_mucs();
+    
+    //graph.insert_edge_update_muc(3,8);
+    //graph.insert_edge_update_muc(14,18);
+    //graph.insert_edge_update_muc(17,19);
+    //graph.insert_edge_update_muc(1,3);
+    tr1::unordered_map<node_id_t, double> bc_map;
+    for(int i = 0; i < graph.muc_vec.size(); ++i) {
+        tr1::unordered_map<node_id_t, double> in_bc_map;
+        graph.muc_vec[i].compute_bc(in_bc_map);
+        bc_map.insert(in_bc_map.begin(), in_bc_map.end());
+        
+    }
+    
+    vector<double> bc_vec = brandes_betweenness_centrality(graph);
+    
+    printf("===========================\n");
+    for(tr1::unordered_map<node_id_t, double>::iterator
+            it =  bc_map.begin();
+            it != bc_map.end();
+            ++it) {
+        printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, it->second, bc_vec[it->first]);
+        
+    }
+}
+
+void test_inc_bc_muc_toy_graph()
+{
+    graph_t graph;
+    fill_test_graph(graph);
+    //graph.insert_edge(3,8);
+    node_id_t src, dst;
+    src = 0; dst = 3;
+    graph.remove_edge(src, dst);
+    
+    graph.find_mucs();
+    
+    tr1_map_t(double) bc_map;
+    bc_map = brandes_bc_hash_out(graph);
+    
+    graph.insert_edge_update_muc(src, dst);
+    muc_id_t muc_id;
+    muc_id = graph.node_to_muc_vec[src];
+    graph.muc_vec[muc_id].compute_bc_inc(bc_map, src, dst);
+    
+    src = 17; dst = 19;
+    graph.insert_edge_update_muc(src, dst);
+    muc_id = graph.node_to_muc_vec[src];
+    graph.muc_vec[muc_id].compute_bc_inc(bc_map, src, dst);
+    src = 0; dst = 2;
+    graph.insert_edge_update_muc(src, dst);
+    muc_id = graph.node_to_muc_vec[src];
+    graph.muc_vec[muc_id].compute_bc_inc(bc_map, src, dst); 
+    
+    vector<double> bc_vec = brandes_betweenness_centrality(graph);
+    printf("===========================\n");
+    for(tr1::unordered_map<node_id_t, double>::iterator
+            it =  bc_map.begin();
+            it != bc_map.end();
+            ++it) {
+        printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, it->second, bc_vec[it->first]);
+    }
+}
+
+void test_inc_bc_muc_real_graph()
+{
+    graph_t graph;
+    graph.read_graph(string("Erdos02.lcc.net"));
+    printf("==============\n==============\n==============\n");
+    graph.find_mucs();
+    printf("Number of MUC's: %d\n", graph.muc_vec.size());
+    
+    node_id_t src, dst;
+    src = 10; dst = 20;
+
+    tr1_map_t(double) bc_map;
+    bc_map = brandes_bc_hash_out(graph);
+    graph.insert_edge_update_muc(src, dst);
+    muc_id_t muc_id;
+    muc_id = graph.node_to_muc_vec[src];
+    graph.muc_vec[muc_id].compute_bc_inc(bc_map, src, dst);
+    
+    vector<double> bc_vec = brandes_betweenness_centrality(graph); 
+    printf("===========================\n");
+    printf("BC values:\n");
+    for(tr1::unordered_map<node_id_t, double>::iterator
+            it =  bc_map.begin();
+            it != bc_map.end();
+            ++it) {
+        //don't print values for single node muc's
+        //bc for these nodes can be computed easily
+        if(graph.muc_vec[graph.node_to_muc_vec[it->first]].muc_subgraph.size() == 1)
+            continue;
+        if(abs(it->second - bc_vec[it->first]) > 0.00001) {
+            printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, it->second, bc_vec[it->first]);
+        }  
+    }
+}
+
+void test_qube_brandes_1()
+{
+    graph_t graph;
+    graph.read_graph(string("Erdos02.lcc.net"));
+    //graph.read_graph(string("rand_graph")); 
+    printf("==============\n==============\n==============\n");
+    graph.find_mucs();
+    //graph.print_mucs();
+    
+    
+    printf("Number of MUC's: %d\n", graph.muc_vec.size());
+    
+    graph.insert_edge_update_muc(3,8);
+    tr1::unordered_map<node_id_t, double> bc_map;
+    for(int i = 0; i < graph.muc_vec.size(); ++i) {
+        tr1::unordered_map<node_id_t, double> in_bc_map;
+        graph.muc_vec[i].compute_bc(in_bc_map);
+        bc_map.insert(in_bc_map.begin(), in_bc_map.end());
+        
+    }
+    
+    vector<double> bc_vec = brandes_betweenness_centrality(graph);
+    
+    printf("===========================\n");
+    printf("BC values:\n");
+    for(tr1::unordered_map<node_id_t, double>::iterator
+            it =  bc_map.begin();
+            it != bc_map.end();
+            ++it) {
+        //don't print values for single node muc's
+        //bc for these nodes can be computed easily
+        if(graph.muc_vec[graph.node_to_muc_vec[it->first]].muc_subgraph.size() == 1)
+            continue;
+        if(abs(it->second - bc_vec[it->first]) > 0.00001) {
+            printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, it->second, bc_vec[it->first]);
+            //printf("\tERROR");
+        }
+        //printf("\n");   
+    }
+}
+
+void test_qube_graphs()
+{
+    graph_t graph;
+    string path  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    path += "Erdos02.net";
+    graph.read_graph(path); 
+    graph.find_mucs();
+    printf("Number of MUC's: %d\n", graph.get_num_mucs());
+    node_id_t src, dst;
+    tr1::unordered_map<node_id_t, double> bc_map;
+    
+    src = 10; dst = 20;
+    graph.insert_edge_update_muc(src, dst);
+    src = 20; dst = 40;
+    graph.insert_edge_update_muc(src, dst);
+    src = 100; dst = 500;
+    graph.insert_edge_update_muc(src, dst);
+    src = 600; dst = 1200;
+    graph.insert_edge_update_muc(src, dst);
+    src = 1600; dst = 2000;
+    graph.insert_edge_update_muc(src, dst);
+    
+    
+    muc_id_t muc_id = graph.node_to_muc_vec[src];
+    graph.muc_vec[muc_id].compute_bc(bc_map);
+    
+    vector<double> bc_vec = brandes_betweenness_centrality(graph);
+    for(tr1::unordered_map<node_id_t, double>::iterator
+            it =  bc_map.begin();
+            it != bc_map.end();
+            ++it) {
+        printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, it->second, bc_vec[it->first]);
+    }
+    printf("Number of MUC's: %d\n", graph.get_num_mucs());
+}
+
+void do_insertion_exp()
+{
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    string graphs_arr[] = 
+        {"Cagr.net" 
+        ,"Eva.net" 
+        ,"Erdos02.net"
+        ,"Erdos972.net"
+        ,"Epa.net"
+        //,"Wiki-Vote.net"
+        //,"Contact.net"
+        };
+    
+//        string graphs_arr[] = 
+//        {"Epa.net"};
+    
+    for(int i = 0; i < 5; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        //string path = path_f +  "CA-GrQc.net";
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_qube(graph, 1);        
+    }
+}
+
+void load_graphs_test()
+{
+    graph_t graph;
+    string path  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/";
+    //path += "com-lj.ungraph.txt.ready";
+    //path += "soc-Slashdot0811.txt.ready";
+    path += "wiki-Talk.txt.ready";
+    graph.read_graph(path);
+    cout << "Done reading graph!" << endl;
+    
+    graph_hash_t g;
+    set<edge_t >::iterator it = graph.edge_set.begin();
+    for(; it != graph.edge_set.end(); ++it) {
+        g.insert_edge(it->first, it->second);
+    }
+    cout << "Done copying to graph_hash_t" << endl;
+    int n;
+    cin >> n;
+}
+
+void compute_bc()
+{
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    string graphs_arr[] = 
+        {"Cagr.net" 
+        ,"Eva.net" 
+        ,"Erdos02.net"
+        ,"Erdos972.net"
+        ,"Epa.net"
+        ,"Wiki-Vote.net"
+        ,"Contact.net"
+        };
+    
+    graph_t graph;
+    //string path = path_f + graphs_arr[7].c_str();
+    string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/email-Enron.txt.ready";
+    graph.read_graph(path);
+    vector<double> bc_vec = brandes_betweenness_centrality(graph);
+    for(int i = 0; i < graph.size(); ++i) {
+        cout << i << ": " << bc_vec[i] << endl;
+    }
+}
+
+void test_art_points_dummy_graph()
+{
+    graph_t g;
+    g.init_size(21);
+    g.insert_edge(0,1);
+    g.insert_edge(0,5);
+    g.insert_edge(1,2);
+    g.insert_edge(1,3);
+    g.insert_edge(2,3);
+    g.insert_edge(2,4);
+    g.insert_edge(3,4);
+    g.insert_edge(5,7);
+    g.insert_edge(7,6);
+    g.insert_edge(7,8);
+    g.insert_edge(6,9);
+    g.insert_edge(8,11);
+    g.insert_edge(9,10);
+    g.insert_edge(10,11);
+    g.insert_edge(11,14);
+    g.insert_edge(14,12);
+    g.insert_edge(14,15);
+    g.insert_edge(14,16);
+    g.insert_edge(14,17);
+    g.insert_edge(12,13);
+    g.insert_edge(13,15);
+    g.insert_edge(16,17);
+    g.insert_edge(4,18);
+    g.insert_edge(18,19);
+    g.insert_edge(19,20);
+    
+//    g.init_size(7);
+//    g.insert_edge(0,3);
+//    g.insert_edge(3,1);
+//    g.insert_edge(3,4);
+//    g.insert_edge(3,5);
+//    g.insert_edge(3,6);
+//    g.insert_edge(1,2);
+//    g.insert_edge(2,4);
+//    g.insert_edge(5,6);
+    
+    vector<node_id_t> art_vec;
+    g.find_art_points(art_vec);
+    printf("Articulation points are: \n");
+    for(int i = 0; i < art_vec.size(); ++i) {
+        printf("[%d], ", art_vec[i]);
+    }
+}
+
+
+void test_art_point_real_graph()
+{
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Cagr.net";
+    string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/wiki-Talk.txt.ready";
+    graph_t g;
+    g.read_graph(path);
+    vector<node_id_t> art_vec;
+    g.find_art_points(art_vec);
+    set<node_id_t> ss;
+    for(int i = 0; i < art_vec.size(); ++i) {
+        ss.insert(art_vec[i]);
+    }
+    printf("Number of art points is: [%d]\n", ss.size());
+}
+
+void test_bcc_dummy_graph()
+{
+    graph_t g;
+    g.init_size(7);
+    g.insert_edge(0,1);
+    g.insert_edge(0,2);
+    g.insert_edge(1,3);
+    g.insert_edge(2,3);
+    g.insert_edge(3,4);
+    g.insert_edge(3,5);
+    g.insert_edge(4,6);
+    g.insert_edge(5,6);
+    
+    vector<graph_hash_t> bcc_vec;
+    g.find_bicon_comp(bcc_vec);
+    printf("Number of biconnected components is: [%d]\n", bcc_vec.size());
+    for(int i = 0; i < bcc_vec.size(); ++i) {
+        bcc_vec[i].print_graph(false);
+    }
+    
+}
+
+void test_bcc_real_graph()
+{
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Wiki-Vote.net";
+    string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/wiki-Talk.txt.ready";
+    graph_t g;
+    g.read_graph(path);
+    vector<graph_hash_t> bcc_vec;
+    g.find_bicon_comp(bcc_vec);
+    printf("Number of bcc's is: [%d]\n", bcc_vec.size());    
+}
+
+void test_edge_bcc_subgraph_dummy_graph()
+{
+    graph_t g;
+    g.init_size(7);
+    g.insert_edge(0,1);
+    g.insert_edge(0,2);
+    g.insert_edge(1,3);
+    g.insert_edge(2,3);
+    g.insert_edge(3,4);
+    g.insert_edge(3,5);
+    g.insert_edge(4,6);
+    g.insert_edge(5,6);
+    
+    graph_hash_t bcc;
+    g.find_edge_bcc_subgraph(bcc, 3, 2);
+    bcc.print_graph(false);  
+}
+
+void test_edge_bcc_subgraph_real_graph()
+{
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Wiki-Vote.net";
+    string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/wiki-Talk.txt.ready";
+    graph_t g;
+    g.read_graph(path);
+    graph_hash_t bcc;
+    g.find_edge_bcc_subgraph(bcc, 1, 5);
+    printf("Size of bcc is: [%d]\n", bcc.size());        
+}
+
+void test_edge_bcc_dummy()
+{
+    graph_t g;
+    g.init_size(16);
+    g.insert_edge(0,1);
+    g.insert_edge(1,2);
+    g.insert_edge(1,6);
+    g.insert_edge(2,3);
+    g.insert_edge(2,4);
+    g.insert_edge(6,7);
+    g.insert_edge(6,9);
+    g.insert_edge(6,10);
+    g.insert_edge(6,4);
+    g.insert_edge(4,5);
+    g.insert_edge(7,8);
+    g.insert_edge(9,8);
+    g.insert_edge(10,11);
+    g.insert_edge(11,12);
+    g.insert_edge(11,13);
+    g.insert_edge(12,13);
+    g.insert_edge(6,2);
+    g.insert_edge(6,14);
+    g.insert_edge(14,15);
+
+    bcc_scratch_t bcc;
+    g.find_edge_bcc(bcc, 6, 2);
+    bcc.print();
+}
+
+void test_bcc_scratch_dummy()
+{
+    graph_t g;
+//    g.init_size(16);
+//    g.insert_edge(0,1);
+//    g.insert_edge(1,2);
+//    g.insert_edge(1,6);
+//    g.insert_edge(2,3);
+//    g.insert_edge(2,4);
+//    g.insert_edge(6,7);
+//    g.insert_edge(6,9);
+//    g.insert_edge(6,10);
+//    g.insert_edge(6,4);
+//    g.insert_edge(4,5);
+//    g.insert_edge(7,8);
+//    g.insert_edge(9,8);
+//    g.insert_edge(10,11);
+//    g.insert_edge(11,12);
+//    g.insert_edge(11,13);
+//    g.insert_edge(12,13);
+//    g.insert_edge(6,2);
+//    g.insert_edge(6,14);
+//    g.insert_edge(14,15);
+    fill_test_graph(g);
+    g.insert_edge(8, 10);
+    g.insert_edge(17, 19);
+    
+    
+    bcc_scratch_t bcc;
+    g.find_edge_bcc(bcc, 4, 5);
+    tr1::unordered_map<node_id_t, double> bc_map;
+    bcc.compute_bc(bc_map);
+    
+    vector<double> bc_vec = brandes_bc(g);
+    
+    printf("===========================\n");
+    for(tr1::unordered_map<node_id_t, double>::iterator
+            it =  bc_map.begin();
+            it != bc_map.end();
+            ++it) {
+        node_id_t id_in_fast_subgraph = bcc.bcc_fast_subgraph.outin_label_map[it->first];
+        if(bcc.art_pt_map.find(id_in_fast_subgraph) != bcc.art_pt_map.end()) {
+            printf("*");
+        }
+        printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, it->second, bc_vec[it->first]);
+    }    
+}
+
+void misc_test_2()
+{
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Wiki-Vote.net";
+    //string path = path_f + "Eva.net";
+    string path = path_f + "Cagr.net";
+    //string path = path_f + "Erdos02.net";
+    
+    node_id_t src, dst;
+    src = 127;
+    dst = 340;
+    
+    graph_t g;
+    g.read_graph(path);
+    g.insert_edge(src, dst);
+    
+    bcc_delta_t bcc;
+    g.find_edge_bcc(bcc, src, dst);
+    bcc.bcc_subgraph.remove_edge(src, dst);
+    
+    int d0, d1, d2;
+    bcc.bcc_subgraph.find_pruning_counts_exp(src, dst, d0, d1, d2);
+    
+    printf("%d %d %d", d0, d1, d2);
+}
+
+void test_inc_brandes()
+{
+    graph_t g;
+    fill_test_graph(g);
+    g.i_init_internals();
+    g.remove_edge(5, 9);
+    vector<double> bc_vec;
+    bc_vec = brandes_bc(g);
+    incremental_brandes(g, 5, 9, bc_vec);
+    
+    g.insert_edge(5, 9);
+    vector<double> ground_bc_vec;
+    ground_bc_vec = brandes_bc(g);
+    printf("===========================\n");
+    for(int i = 0; i < bc_vec.size(); ++i) {
+        printf("BC[%d]: %f \tBrandes BC: %f\n", i, bc_vec[i], ground_bc_vec[i]);
+    }
+}
+
+void test_inc_brandes_real_graph()
+{
+    timer tm;
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Wiki-Vote.net";
+    //string path = path_f + "Eva.net";
+    //string path = path_f + "Cagr.net";
+    string path = path_f + "Erdos02.net";
+    //string path = path_f + "Erdos972.net";
+    //string path = path_f + "Epa.net";
+    //string path = path_f + "Contact.net";                
+    //string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/wiki-Talk.txt.ready";
+    graph_t g;
+    g.read_graph(path);
+    
+    
+    edge_t e = *(g.edge_set.begin());
+//    edge_t e; e.first=30; e.second=20;
+//    if(g.edge_set.find(e) != g.edge_set.end()) {
+//        printf("Edge already there!");
+//        return;
+//    }
+
+    g.remove_edge(e.first, e.second);
+    vector<double> bc_vec;
+    printf("Doing first Brandes...");
+    tm.start();
+    bc_vec = brandes_bc(g);
+    tm.stop();
+    printf("Time: %f\n", tm.interval());
+    printf("Doing incremental Brandes...");
+    tm.start();
+    incremental_brandes(g, e.first, e.second, bc_vec);
+    tm.stop();
+    printf("Time: %f\n", tm.interval());
+    
+    g.insert_edge(e.first, e.second);
+    vector<double> ground_bc_vec;
+    printf("Doing second Brandes...");
+    tm.start();
+    ground_bc_vec = brandes_bc(g);
+    tm.stop();
+    printf("Time: %f\n", tm.interval());
+    printf("===========================\n");
+    for(int i = 0; i < bc_vec.size(); ++i) {
+        if(abs(bc_vec[i] - ground_bc_vec[i]) > 0.000001)
+            printf("BC[%d]: %f \tBrandes BC: %f\n", i, bc_vec[i], ground_bc_vec[i]);
+    }
+}
+
+void incremental_brandes_edges_exp() {
+    
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+    string graphs_arr[] = 
+        {""
+//        ,"erdos02.lbcc.lcc"
+//        ,"erdos02.lmuc.lcc"
+        ,"Erdos02.lcc.net"
+        ,"Cagr.lcc.net" 
+        ,"Eva.lcc.net" 
+        ,"Erdos972.lcc.net"
+        ,"Epa.lcc.net"
+        ,"Wiki-Vote.lcc.net"
+        ,"Contact.lcc.net"
+        };
+    
+    for(int i = 1; i <= 7; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        vector<edge_t> edge_vec;
+        edge_vec.push_back(make_pair(1, 4));
+        incremental_brandes_test(graph, 10, edge_vec);
+    }
+}
+
+void qube_muc_exp(bool use_incremental = false)
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif   
+    string graphs_arr[] = 
+        { "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+        };    
+    for(int i = 0; i < 7; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_qube_hash(graph, 5, vector<edge_t>(), use_incremental);
+    }
+}
+
+void test_my_inc_bc_dummy()
+{
+    int src, dst;
+    src = 5; dst = 9;
+    
+    graph_t g;
+    graph_hash_t gh;
+    bcc_delta_t bcc;
+    
+    fill_test_graph(g);
+    g.remove_edge(src, dst);
+    
+    gh.fill_graph(g);
+    tr1_map_t(double) bc_map;
+    bc_map = brandes_bc_hash(gh);
+    g.insert_edge(src, dst);
+    g.find_edge_bcc(bcc, src, dst);
+    bcc_stat_t bcc_stat;
+    bcc.compute_bc_exp(bc_map, src, dst, bcc_stat);
+    
+    
+    vector<double> ground_bc_vec;
+    ground_bc_vec = brandes_bc(g);
+    printf("===========================\n");
+    for(graph_hash_t::nodes_map_t::iterator it = bcc.bcc_subgraph.nodes_map.begin();
+            it != bcc.bcc_subgraph.nodes_map.end();
+            ++it) {
+        if(abs(bc_map[it->first] - ground_bc_vec[it->first]) > 0.000001)
+            printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, bc_map[it->first], ground_bc_vec[it->first]);
+    }
+}
+
+void test_my_inc_bc_real_graph()
+{
+    timer tm;
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Wiki-Vote.net";
+    //string path = path_f + "Eva.net";
+    //string path = path_f + "Cagr.net";
+    //string path = path_f + "Erdos02.net";
+    //string path = path_f + "Erdos972.net";
+    string path = path_f + "Epa.net";
+    //string path = path_f + "Contact.net";                
+    //string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/wiki-Talk.txt.ready";
+    graph_t g;
+    g.read_graph(path);
+
+//    edge_t e = *(g.edge_set.begin());
+//    edge_t e; e.first=30; e.second=20;
+//    if(g.edge_set.find(e) != g.edge_set.end()) {
+//        printf("Edge already there!");
+//        return;
+//    }
+    edge_t e;
+    e.first = 3628;
+    e.second = 767;
+    int src, dst;
+    src = e.first; dst = e.second;
+    
+    graph_hash_t gh;
+    bcc_delta_t bcc;
+    
+    g.remove_edge(src, dst);
+    
+    gh.fill_graph(g);
+    tr1_map_t(double) bc_map;
+    printf("Doing first Brandes...");
+    tm.start();
+    bc_map = brandes_bc_hash(gh);
+    tm.stop();
+    printf("Time: %f\n", tm.interval());
+    
+    //edge needs to be inserted before bcc is found
+    g.insert_edge(src, dst);
+    
+    printf("Finding BCC...");
+    tm.start();
+    g.find_edge_bcc(bcc, src, dst);
+    tm.stop();
+    printf("Time: %f\n", tm.interval());
+    
+    printf("Doing incremental BC Fuad...");
+    tm.start();
+    bcc_stat_t bcc_stat;
+    bcc.compute_bc_exp(bc_map, src, dst, bcc_stat);    
+    tm.stop();
+    printf("Time: %f\n", tm.interval());
+    
+    printf("Doing second Brandes...");
+    vector<double> ground_bc_vec;
+    tm.start();
+    ground_bc_vec = brandes_bc(g);
+    tm.stop();
+    printf("Time: %f", tm.interval());
+    printf("\n===========================\n");
+    for(graph_hash_t::nodes_map_t::iterator it = bcc.bcc_subgraph.nodes_map.begin();
+            it != bcc.bcc_subgraph.nodes_map.end();
+            ++it) {
+        if(abs(bc_map[it->first] - ground_bc_vec[it->first]) > 0.000001)
+            printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, bc_map[it->first], ground_bc_vec[it->first]);
+    }  
+}
+
+void test_my_inc_bc_real_graph_2()
+{
+    timer tm;
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Wiki-Vote.net";
+    //string path = path_f + "Eva.net";
+    //string path = path_f + "Cagr.net";
+    //string path = path_f + "Erdos02.net";
+    //string path = path_f + "Erdos972.net";
+    string path = path_f + "Epa.net";
+    //string path = path_f + "Contact.net";                
+    //string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/wiki-Talk.txt.ready";
+    graph_t g;
+    g.read_graph(path);
+
+//    edge_t e = *(g.edge_set.begin());
+//    edge_t e; e.first=30; e.second=20;
+//    if(g.edge_set.find(e) != g.edge_set.end()) {
+//        printf("Edge already there!");
+//        return;
+//    }
+    edge_t e;
+    e.first = 3628;
+    e.second = 767;
+    
+    printf("Doing incremental BC Fuad...");
+    tm.start();
+    bcc_stat_t bcc_stat;
+    g.insert_edge_update_bc_experimental(e.first, e.second, bcc_stat);   
+    tm.stop();
+    printf("Time: %f\n", tm.interval());
+    
+    printf("Doing second Brandes...");
+    vector<double> ground_bc_vec;
+    tm.start();
+    ground_bc_vec = brandes_bc(g);
+    tm.stop();
+    printf("Time: %f", tm.interval());
+    printf("\n===========================\n");
+    for(tr1_map_t(double)::iterator it = g.bc_map.begin();
+            it != g.bc_map.end();
+            ++it) {
+        if(abs(it->second - ground_bc_vec[it->first]) > 0.000001)
+            printf("BC[%d]: %f \tBrandes BC: %f\n", it->first, it->second, ground_bc_vec[it->first]);
+    }  
+}
+
+void fuad_simple_insertion_test()
+{
+    string path_f  = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    string graphs_arr[] = 
+        {"Cagr.net" 
+        ,"Eva.net" 
+        ,"Erdos02.net"
+        ,"Erdos972.net"
+        ,"Epa.net"
+        ,"Wiki-Vote.net"
+        ,"Contact.net"
+        };    
+    for(int i = 0; i < 7; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_fuad_hash(graph, 1);        
+    }
+}
+
+void fuad_simple_insertion_est_test()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+//        , "ca-CondMat.lcc.net"
+//        , "ca-HepTh.lcc.net"
+//        , "ca-HepPh.lcc.net"
+//        , "ca-AstroPh.lcc.net"
+//        , "ca-GrQc.lcc.net"
+//                
+//        , "amazon.lcc.net"
+//        , "epinions.lcc.net"
+//        , "facbook.lcc.net"
+//        , "wikielections.lcc.net"
+//        , "dblp.lcc.net"      
+//        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    int start, end;
+    start = 1;
+    end = 1;
+    for(int i = start; i <= end; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_fuad_max_iter(graph, 10, 10, 80);  
+        //cout << graph.graph_name << endl;
+    }
+}
+
+void misc_3()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+        , "ca-CondMat.lcc.net"
+        , "ca-HepTh.lcc.net"
+        , "ca-HepPh.lcc.net"
+        , "ca-AstroPh.lcc.net"
+        , "ca-GrQc.lcc.net"
+                
+        , "amazon.lcc.net"
+        , "epinions.lcc.net"
+        , "facbook.lcc.net"
+        , "wikielections.lcc.net"
+        , "dblp.lcc.net"      
+        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    for(int i = 1; i <= 33; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        compare_brandes_hash_vs_vector(graph, 10);  
+        //cout << graph.graph_name << endl;
+    } 
+}
+
+void test_speedup_info_lbcc()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+        , "ca-CondMat.lcc.net"
+        , "ca-HepTh.lcc.net"
+        , "ca-HepPh.lcc.net"
+        , "ca-AstroPh.lcc.net"
+        , "ca-GrQc.lcc.net"
+                
+        , "amazon.lcc.net"
+        , "epinions.lcc.net"
+        , "facbook.lcc.net"
+        , "wikielections.lcc.net"
+        , "dblp.lcc.net"      
+        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    for(int i = 1; i <= 33; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        speedup_info_lbcc(graph, 10);  
+        //cout << graph.graph_name << endl;
+    } 
+}
+
+void test_speedup_info()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+        , "ca-CondMat.lcc.net"
+        , "ca-HepTh.lcc.net"
+        , "ca-HepPh.lcc.net"
+        , "ca-AstroPh.lcc.net"
+        , "ca-GrQc.lcc.net"
+                
+        , "amazon.lcc.net"
+        , "epinions.lcc.net"
+        , "facbook.lcc.net"
+        , "wikielections.lcc.net"
+        , "dblp.lcc.net"      
+        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    for(int i = 1; i <= 33; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        speedup_info(graph, 100);  
+    }  
+}
+
+void test_count_bcc()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+        , "ca-CondMat.lcc.net"
+        , "ca-HepTh.lcc.net"
+        , "ca-HepPh.lcc.net"
+        , "ca-AstroPh.lcc.net"
+        , "ca-GrQc.lcc.net"
+                
+        , "amazon.lcc.net"
+        , "epinions.lcc.net"
+        , "facbook.lcc.net"
+        , "wikielections.lcc.net"
+        , "dblp.lcc.net"      
+        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    for(int i = 1; i <= 33; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        count_bcc(graph, 3); 
+    }
+}
+
+void test_disconnected_graph_update()
+{
+    /*
+     * doing bc update for edge insertion for an edge
+     * that connects two disconnected components in the graph is
+     * easy: use the pair dep of the newly created art points multiplied
+     * by the size of the subgraph they connect to to increment the bc of
+     * the nodes in the subgraphs of the respective art points
+     * (requires 2 traversals for each of the connected components)
+     */
+    graph_t g;
+    g.init_size(8);
+    g.insert_edge(0, 1);
+    g.insert_edge(0, 2);
+    g.insert_edge(1, 3);
+    g.insert_edge(2, 3);
+    g.insert_edge(3, 4);
+    g.insert_edge(4, 5);
+    g.insert_edge(4, 6);
+    g.insert_edge(5, 7);
+    g.insert_edge(6, 7);
+    
+    //g.remove_edge(3, 4);
+    g.bc_vec = brandes_bc(g);
+    
+    for(int i = 0; i < g.bc_vec.size(); ++i) {
+        printf("BC[%d]: %f\n", i, g.bc_vec[i]);
+    }
+    
+}
+
+void test_inc_bc_dummy_graph()
+{
+    int src, dst;
+    src = 5; dst = 9;
+    
+    graph_t g;
+    fill_test_graph(g);
+    g.remove_edge(src, dst);
+    
+    graph_hash_t gh;
+    gh.fill_graph(g);
+    
+    g.bc_map = brandes_bc_hash(gh);
+    bcc_stat_t bcc_stat;
+    g.insert_edge_update_bc_experimental(src, dst, bcc_stat);
+    
+    
+    vector<double> ground_bc_vec;
+    ground_bc_vec = brandes_bc(g);
+    printf("===========================\n");
+    for(int i = 0; i < ground_bc_vec.size(); ++i) {
+        if(abs(g.bc_map[i] - ground_bc_vec[i]) > 0.000001)
+            printf("BC[%d]: %f \tBrandes BC: %f\n",
+                    i,
+                    g.bc_map[i],
+                    ground_bc_vec[i]);
+    }
+}
+
+void test_inc_bc_real_graph()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/QUBE_data/clean/";
+    //string path = path_f + "Wiki-Vote.net";
+    //string path = path_f + "Eva.net";
+    //string path = path_f + "Cagr.net";
+    //string path = path_f + "Erdos02.net";
+    string path = path_f + "Erdos972.net";
+    //string path = path_f + "Epa.net";
+    //string path = path_f + "Contact.net";                
+    //string path = "/home/fuad/Desktop/Research/Betweenness-Centrality/data/bcc_vs_muc/wiki-Talk.txt.ready";
+    graph_t g;
+    g.read_graph(path);
+
+    edge_t e = *(g.edge_set.begin());
+//    edge_t e; e.first=30; e.second=20;
+//    if(g.edge_set.find(e) != g.edge_set.end()) {
+//        printf("Edge already there!");
+//        return;
+//    }
+    
+    int src, dst;
+    src = e.first; dst = e.second;
+    
+    g.remove_edge(src, dst);
+    
+    graph_hash_t gh;
+    gh.fill_graph(g);
+    
+    g.bc_map = brandes_bc_hash(gh);
+    bcc_stat_t bcc_stat;
+    g.insert_edge_update_bc_experimental(src, dst, bcc_stat);
+    
+    
+    vector<double> ground_bc_vec;
+    ground_bc_vec = brandes_bc(g);
+    printf("===========================\n");
+    for(int i = 0; i < ground_bc_vec.size(); ++i) {
+        if(abs(g.bc_map[i] - ground_bc_vec[i]) > 0.000001)
+            printf("BC[%d]: %f \tBrandes BC: %f\n",
+                    i,
+                    g.bc_map[i],
+                    ground_bc_vec[i]);
+    }
+}
+
+void test_find_bridges_dummy_graph()
+{
+    graph_t g;
+    fill_test_graph(g);
+    
+    vector<edge_t> bridge_vec;
+    g.find_bridge_edges(bridge_vec);
+    printf("Number of bridge edges: %d\n", bridge_vec.size());
+    printf("Bridges:\n");
+    for(int i = 0; i < bridge_vec.size(); ++i) {
+       printf("[%d -- %d]\n", bridge_vec[i].first, bridge_vec[i].second); 
+    }
+}
+
+void test_find_conn_comp_dummy_graph()
+{
+    graph_t g;
+    fill_test_graph(g);
+    graph_hash_t gh;
+    gh.fill_graph(g);
+    
+    vector<edge_t> bridge_vec;
+    g.find_bridge_edges(bridge_vec);
+    
+    for(int i = 0; i < bridge_vec.size(); ++i) {
+       gh.remove_edge(bridge_vec[i].first, bridge_vec[i].second);
+    }
+    
+    vector<graph_hash_t> conn_comp_vec;
+    gh.find_conn_comp(conn_comp_vec);
+    for(int i = 0; i < conn_comp_vec.size(); ++i) {
+        conn_comp_vec[i].print_graph();
+    }
+}
+
+void tmp_fuad_vs_qube_exp(int num_edges)
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""       
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+        };
+    
+    //to make sure the exact same edges are used for my system and QUBE
+    //I pass the same edges to both systems
+    
+    int num_graph = 7;
+    int start_graph  = 1;
+    vector<vector<edge_t> > edge_vec2;
+    edge_vec2.push_back(vector<edge_t>());
+    printf("Reading graphs and generating edges...\n");
+    printf("========================================\n");
+    for(int i = 1; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        vector<edge_t> edge_vec;
+        gen_rand_edges(num_edges, graph, edge_vec);
+        edge_vec2.push_back(edge_vec);
+    }
+    printf("\n\n\n");
+    printf("Starting Fuad stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_fuad_max_iter(graph,
+                edge_vec2[i].size(),
+                10,
+                80,
+                edge_vec2[i]);  
+    }
+    printf("\n\n\n");
+    printf("Starting QUBE with incremental BFS stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_qube_hash(graph,
+                edge_vec2[i].size(),
+                edge_vec2[i],
+                true);        
+    }
+    printf("\n\n\n");
+    printf("Starting QUBE stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_qube_hash(graph,
+                edge_vec2[i].size(),
+                edge_vec2[i]);        
+    }
+}
+
+void qube_ideal_speedup_exp()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+//        , "ca-CondMat.lcc.net"
+//        , "ca-HepTh.lcc.net"
+//        , "ca-HepPh.lcc.net"
+//        , "ca-AstroPh.lcc.net"
+//        , "ca-GrQc.lcc.net"
+//                
+//        , "amazon.lcc.net"
+//        , "epinions.lcc.net"
+//        , "facbook.lcc.net"
+//        , "wikielections.lcc.net"
+//        , "dblp.lcc.net"      
+//        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    int start, end;
+    start = 1;
+    end = 7;
+#ifdef DELL1
+    start = 27;
+#endif
+    for(int i = start; i <= end; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        qube_ideal_speedup(graph, 100);
+    }
+}
+
+void test_lbcc_stat()
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+        , "ca-CondMat.lcc.net"
+        , "ca-HepTh.lcc.net"
+        , "ca-HepPh.lcc.net"
+        , "ca-AstroPh.lcc.net"
+        , "ca-GrQc.lcc.net"
+                
+        , "amazon.lcc.net"
+        , "epinions.lcc.net"
+        , "facbook.lcc.net"
+        , "wikielections.lcc.net"
+        , "dblp.lcc.net"      
+        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    for(int i = 1; i <= 33; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        lbcc_stat(graph); 
+    }
+}
+
+
+void fuad_vs_qube_models_same_edges(int num_edges, int num_iter)
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""
+        , "ca-CondMat.lcc.net"
+        , "ca-HepTh.lcc.net"
+        , "ca-HepPh.lcc.net"
+        , "ca-AstroPh.lcc.net"
+        , "ca-GrQc.lcc.net"
+                
+        , "amazon.lcc.net"
+        , "epinions.lcc.net"
+        , "facbook.lcc.net"
+        , "wikielections.lcc.net"
+        , "dblp.lcc.net"      
+        , "slashdot.lcc.net"
+                
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+                
+        , "com-amazon.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Slashdot0811.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "cit-HepTh.lcc.net"
+        , "wordnet.lcc.net"
+        , "cit-HepPh.lcc.net"
+        , "com-youtube.lcc.net"
+        , "p2p-Gnutella04.lcc.net"
+
+        , "com-dblp.lcc.net"
+        , "wiki-Talk.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "cit-Patents.lcc.net"
+        , "com-lj.lcc.net"
+        };
+    int start, end;
+    start = 1;
+    end = 33;
+    vector<vector<edge_t> > edge_vec2;
+    edge_vec2.push_back(vector<edge_t>());
+    printf("Reading graphs and generating edges...\n");
+    printf("========================================\n");
+    for(int i = 1; i <= end; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        vector<edge_t> edge_vec;
+        gen_rand_edges(num_edges, graph, edge_vec);
+        edge_vec2.push_back(edge_vec);
+    }
+    printf("\n\n\n");
+    printf("Starting Fuad stuff...\n");
+    printf("========================================\n");
+    for(int i = start; i <= end; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_fuad_max_iter(graph,
+                edge_vec2[i].size(),
+                num_iter,
+                80,
+                edge_vec2[i]);  
+    }
+    printf("\n\n\n");
+    printf("Starting QUBE stuff...\n");
+    printf("========================================\n");
+    for(int i = start; i <= end; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        qube_ideal_speedup(graph, edge_vec2[i].size(), edge_vec2[i]);     
+    }
+}
+
+
+void tmp_misc()
+{  
+}
+
+void compare_all_exp(int num_edges)
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""       
+        , "Erdos02.lcc.net"
+        , "Erdos972.lcc.net"
+        , "Cagr.lcc.net"
+        , "Eva.lcc.net"
+        , "Epa.lcc.net"
+        , "Contact.lcc.net"
+        , "Wiki-Vote.lcc.net"
+        };
+    
+    //to make sure the exact same edges are used for my system and QUBE
+    //I pass the same edges to both systems
+    
+    int num_graph = 7;
+    int start_graph  = 1;
+    vector<vector<edge_t> > edge_vec2;
+    edge_vec2.push_back(vector<edge_t>());
+    printf("Reading graphs and generating edges...\n");
+    printf("========================================\n");
+    for(int i = 1; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        vector<edge_t> edge_vec;
+        gen_rand_edges(num_edges, graph, edge_vec);
+        edge_vec2.push_back(edge_vec);
+    }
+    printf("\n\n\n");
+    printf("Starting Fuad stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_fuad_max_iter(graph,
+                edge_vec2[i].size(),
+                10,
+                80,
+                edge_vec2[i]);  
+    }
+    printf("\n\n\n");
+    printf("Starting QUBE with incremental BFS stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_qube_hash(graph,
+                edge_vec2[i].size(),
+                edge_vec2[i],
+                true);        
+    }
+    printf("\n\n\n");
+    printf("Starting QUBE stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_qube_hash(graph,
+                edge_vec2[i].size(),
+                edge_vec2[i]);        
+    }
+    printf("\n\n\n");
+    printf("Starting Incremental Brandes...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        incremental_brandes_test(graph, edge_vec2[i].size(), edge_vec2[i]);
+    } 
+}
+
+void exp_fuad_big_graphs(int num_edges)
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+    string graphs_arr[] = 
+        { ""       
+        , "slashdot.lcc.net"
+        , "wordnet.lcc.net"
+        , "email-Enron.lcc.net"
+        , "soc-Epinions1.lcc.net"
+        , "email-EuAll.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "com-dblp.lcc.net"
+        };
+    
+    //to make sure the exact same edges are used for my system and QUBE
+    //I pass the same edges to both systems
+    
+    int num_graph = 7;
+    int start_graph  = 1;
+    vector<vector<edge_t> > edge_vec2;
+    edge_vec2.push_back(vector<edge_t>());
+    printf("Reading graphs and generating edges...\n");
+    printf("========================================\n");
+    for(int i = 1; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        vector<edge_t> edge_vec;
+        gen_rand_edges(num_edges, graph, edge_vec);
+        edge_vec2.push_back(edge_vec);
+    }
+    printf("\n\n\n");
+    printf("Starting Fuad stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_fuad_max_iter(graph,
+                edge_vec2[i].size(),
+                10,
+                10.0*3600,
+                edge_vec2[i]);  
+    }    
+}
+
+
+
+void fuad_vs_qube_est_big_graphs(int num_edges, int num_iter)
+{
+    string path_f  = "/home/jamourft/Desktop/Research/Betweenness-Centrality/data/fj_lcc_graphs/";
+#ifdef DELL1
+    path_f = "/home/jamourft/scratch/fj_lcc_graphs/";
+#endif
+//    string graphs_arr[] = 
+//        { ""       
+//        , "Erdos02.lcc.net"
+//        , "Erdos972.lcc.net"
+//        , "Cagr.lcc.net"
+//        , "Eva.lcc.net"
+//        , "Epa.lcc.net"
+//        , "Contact.lcc.net"
+//        , "Wiki-Vote.lcc.net"
+//        };
+    
+    string graphs_arr[] = 
+        { ""       
+        , "email-EuAll.lcc.net"
+        , "wordnet.lcc.net"
+        , "web-NotreDame.lcc.net"
+        , "epinions.lcc.net"
+        , "email-Enron.lcc.net"
+        , "com-dblp.lcc.net"
+        , "twitter-munmun.lcc.net"
+        };
+    
+    //to make sure the exact same edges are used for my system and QUBE
+    //I pass the same edges to both systems
+    
+    int num_graph = 7;
+    int start_graph  = 1;
+    vector<vector<edge_t> > edge_vec2;
+    edge_vec2.push_back(vector<edge_t>());
+    printf("Reading graphs and generating edges...\n");
+    printf("========================================\n");
+    for(int i = 1; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        vector<edge_t> edge_vec;
+        gen_rand_edges(num_edges, graph, edge_vec);
+        edge_vec2.push_back(edge_vec);
+    }
+    printf("\n\n\n");
+    printf("Starting Fuad stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_fuad_max_iter(graph,
+                edge_vec2[i].size(),
+                num_iter,
+                1,
+                edge_vec2[i]);  
+    }
+    printf("\n\n\n");
+    printf("Starting QUBE stuff...\n");
+    printf("========================================\n");
+    for(int i = start_graph; i <= num_graph; ++i) {
+        graph_t graph;
+        string path = path_f + graphs_arr[i].c_str();
+        graph.read_graph(path);
+        graph.graph_name = graphs_arr[i];
+        insertion_test_qube_hash(graph,
+                edge_vec2[i].size(),
+                edge_vec2[i],
+                false,
+                num_iter);        
+    }
+}
+
+
+
+
+    //test_graph_t();
+    //test_naive_bc();
+    //test_graph_reader();
+    //misc_test();
+    //leda_test_mcb();
+    //test_graph_hash();
+    //test_path_find();
+    //test_muc_find();
+    //test_muc_update();
+    //test_conn_comp_count();
+    //test_qube_brandes_toy_graph();
+    //test_qube_brandes_1();
+    //test_qube_graphs();
+    //do_insertion_exp();
+    //load_graphs_test();
+    //compute_bc();
+    
+    //test_art_points_dummy_graph();
+    //test_art_point_real_graph();
+    //test_bcc_dummy_graph();
+    //test_bcc_real_graph();
+    
+    //test_edge_bcc_subgraph_dummy_graph();
+    //test_edge_bcc_subgraph_real_graph();
+    
+    //test_bcc_scratch_dummy();
+    
+    //misc_test_2();
+    //test_inc_brandes();
+    //test_inc_brandes_real_graph();
+    
+    //do_insertion_exp_hash();
+    //test_my_inc_bc_dummy();
+    //test_my_inc_bc_real_graph();
+    //test_my_inc_bc_real_graph_2();
+    
+    
+    
+    //fuad_simple_insertion_test();
+    
+    //misc_3();
+    //test_speedup_info_lbcc();
+    //test_speedup_info();
+    //test_count_bcc();
+    //test_disconnected_graph_update();
+    
+    //test_inc_bc_dummy_graph();
+    //test_inc_bc_real_graph();
+    
+    //fuad_simple_insertion_est_test();
+    
+    //test_find_bridges_dummy_graph();
+    
+    //test_find_conn_comp_dummy_graph();
+    
+    //tmp_fuad_vs_qube_exp(10);
+    
+    //qube_ideal_speedup_exp();
+    
+    //test_lbcc_stat();
+    
+    //fuad_vs_qube_models_same_edges(10, 10);
+    
+    //test_inc_bc_muc_toy_graph();
+    
+    //test_inc_bc_muc_real_graph();
+    
+    //incremental_brandes_edges_exp();
+    
+    //compare_all_exp(10);
+    
+    //srand(14123);
+    //exp_fuad_big_graphs(10);
+    
+    //qube_muc_exp();
+    
+    //srand(4168);
+    //fuad_vs_qube_est_big_graphs(10, 50);

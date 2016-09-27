@@ -1,0 +1,312 @@
+Hello!
+Reading graphs and generating edges...
+========================================
+
+
+
+Starting Brandes...
+========================================
+==========================================================
+Graph:: 			Erdos02.lcc.net
+Graph # nodes: 		6927
+Graph # edges: 		11850
+Brandes runtime: 	12.272486
+Brandes avg iter time: 	0.001772
+DID 10 ITERATIONS...
+==========================================================
+Graph:: 			Erdos972.lcc.net
+Graph # nodes: 		5440
+Graph # edges: 		8940
+Brandes runtime: 	6.169426
+Brandes avg iter time: 	0.001134
+DID 10 ITERATIONS...
+
+
+
+Starting Incremental-Brandes...
+========================================
+==========================================================
+Graph: 			Erdos02.lcc.net
+Graph # nodes: 		6927
+Graph # edges: 		11850
+Incremental-Brandes avg. runtime:	3.278155
+Avg d1 BFS time:			0.001164 (0.656805)
+Avg d2 BFS time:			0.001624 (0.916719)
+[[Avg. speedup (inc_brandes):		3.743717]]
+==========================================================
+Graph: 			Erdos972.lcc.net
+Graph # nodes: 		5440
+Graph # edges: 		8940
+Incremental-Brandes avg. runtime:	3.358394
+Avg d1 BFS time:			0.000888 (0.782995)
+Avg d2 BFS time:			0.001280 (1.128262)
+[[Avg. speedup (inc_brandes):		1.837017]]
+
+
+
+Starting QUBE...
+========================================
+==========================================================
+Graph: 			Erdos02.lcc.net
+Graph # nodes: 		6927
+Graph # edges: 		11850
+# MUCs: 		4781
+Time to find MUCs: 	0.173067
+WILL DO 10 ITERATIONS...
+Adding edge (6766, 1231)
+	MUC # nodes: 		2148 (0.310091 G_n)
+	MUC # edges: 		7072 (0.596743 G_M)
+
+	Time to update BC: 	2.169839
+	Speedup: 		5.655943
+
+	QUBE avg iter time: 	0.001010
+	Time to update MUCs: 	0.016259
+Adding edge (4206, 3532)
+	MUC # nodes: 		2150 (0.310380 G_n)
+	MUC # edges: 		7075 (0.596946 G_M)
+
+	Time to update BC: 	2.137750
+	Speedup: 		5.740842
+
+	QUBE avg iter time: 	0.000994
+	Time to update MUCs: 	0.015484
+Adding edge (4418, 1147)
+	MUC # nodes: 		2151 (0.310524 G_n)
+	MUC # edges: 		7077 (0.597064 G_M)
+
+	Time to update BC: 	2.083908
+	Speedup: 		5.889169
+
+	QUBE avg iter time: 	0.000969
+	Time to update MUCs: 	0.015272
+[[Avg. speedup (qube): 5.761985]]
+==========================================================
+Graph: 			Erdos972.lcc.net
+Graph # nodes: 		5440
+Graph # edges: 		8940
+# MUCs: 		3705
+Time to find MUCs: 	0.097426
+WILL DO 10 ITERATIONS...
+Adding edge (4746, 4332)
+	MUC # nodes: 		1738 (0.319485 G_n)
+	MUC # edges: 		5239 (0.585952 G_M)
+
+	Time to update BC: 	1.478206
+	Speedup: 		4.173591
+
+	QUBE avg iter time: 	0.000851
+	Time to update MUCs: 	0.012035
+Adding edge (4329, 461)
+	MUC # nodes: 		1738 (0.319485 G_n)
+	MUC # edges: 		5240 (0.585999 G_M)
+
+	Time to update BC: 	1.821789
+	Speedup: 		3.386465
+
+	QUBE avg iter time: 	0.001048
+	Time to update MUCs: 	0.000005
+Adding edge (1722, 4587)
+	MUC # nodes: 		1739 (0.319669 G_n)
+	MUC # edges: 		5242 (0.586157 G_M)
+
+	Time to update BC: 	1.553949
+	Speedup: 		3.970161
+
+	QUBE avg iter time: 	0.000894
+	Time to update MUCs: 	0.011973
+[[Avg. speedup (qube): 3.843406]]
+
+
+
+Starting Incremental-QUBE...
+========================================
+==========================================================
+Graph: 			Erdos02.lcc.net
+Graph # nodes: 		6927
+Graph # edges: 		11850
+# MUCs: 		4781
+Time to find MUCs: 	0.176195
+WILL DO 10 ITERATIONS...
+Adding edge (6766, 1231)
+	MUC # nodes: 		2148 (0.310091 G_n)
+	MUC # edges: 		7072 (0.596743 G_M)
+
+	Time to update BC: 	54.293173
+	Speedup: 		0.226041
+
+	QUBE avg iter time: 	0.025276
+	Time to update MUCs: 	0.015191
+Adding edge (4206, 3532)
+	MUC # nodes: 		2150 (0.310380 G_n)
+	MUC # edges: 		7075 (0.596946 G_M)
+
+	Time to update BC: 	13.104335
+	Speedup: 		0.936521
+
+	QUBE avg iter time: 	0.006095
+	Time to update MUCs: 	0.015967
+Adding edge (4418, 1147)
+	MUC # nodes: 		2151 (0.310524 G_n)
+	MUC # edges: 		7077 (0.597064 G_M)
+
+	Time to update BC: 	200.711734
+	Speedup: 		0.061145
+
+	QUBE avg iter time: 	0.093311
+	Time to update MUCs: 	0.015056
+[[Avg. speedup (inc_qube): 0.407902]]
+==========================================================
+Graph: 			Erdos972.lcc.net
+Graph # nodes: 		5440
+Graph # edges: 		8940
+# MUCs: 		3705
+Time to find MUCs: 	0.090153
+WILL DO 10 ITERATIONS...
+Adding edge (4746, 4332)
+	MUC # nodes: 		1738 (0.319485 G_n)
+	MUC # edges: 		5239 (0.585952 G_M)
+
+	Time to update BC: 	58.461974
+	Speedup: 		0.105529
+
+	QUBE avg iter time: 	0.033637
+	Time to update MUCs: 	0.011809
+Adding edge (4329, 461)
+	MUC # nodes: 		1738 (0.319485 G_n)
+	MUC # edges: 		5240 (0.585999 G_M)
+
+	Time to update BC: 	99.160927
+	Speedup: 		0.062216
+
+	QUBE avg iter time: 	0.057055
+	Time to update MUCs: 	0.000006
+Adding edge (1722, 4587)
+	MUC # nodes: 		1739 (0.319669 G_n)
+	MUC # edges: 		5242 (0.586157 G_M)
+
+	Time to update BC: 	54.512835
+	Speedup: 		0.113174
+
+	QUBE avg iter time: 	0.031347
+	Time to update MUCs: 	0.011906
+[[Avg. speedup (inc_qube): 0.093640]]
+
+
+
+Starting FUAD...
+========================================
+==========================================================
+Graph: 			Erdos02.lcc.net
+Graph # nodes: 		6927
+Graph # edges: 		11850
+WILL DO 10 ITERATIONS...
+Inserting edge (6766, 1231) and updating bc...
+	BCC num nodes: 			2146 (0.309802 G_n)
+	BCC num edges: 			7069 (0.596490 G_m)
+
+	Time to update BC: 		0.278130
+	Speedup: 			44.124979
+
+	BCC d1 time: 			0.000413 (0.937392 to naive iter)
+	BCC d2 time: 			0.000619 (1.405141 to naive iter)
+	avg iter time naive: 		0.000441 (1.000000 to naive iter)
+
+	BCC num/tot d0 BFS: 		    1513/    1513 (0.705033 to BCC_n)
+	BCC num/tot d1 BFS: 		      10/     552 (0.257223 to BCC_n)
+	BCC num/tot d2 BFS: 		      10/      81 (0.037745 to BCC_n)
+
+	BCC bcc find time: 		0.012190
+	BCC sssp time: 			0.000407
+Inserting edge (4206, 3532) and updating bc...
+	BCC num nodes: 			2148 (0.310091 G_n)
+	BCC num edges: 			7072 (0.596693 G_m)
+
+	Time to update BC: 		0.059543
+	Speedup: 			206.110524
+
+	BCC d1 time: 			0.000392 (0.929958 to naive iter)
+	BCC d2 time: 			0.000514 (1.220651 to naive iter)
+	avg iter time naive: 		0.000421 (1.000000 to naive iter)
+
+	BCC num/tot d0 BFS: 		    2002/    2002 (0.932030 to BCC_n)
+	BCC num/tot d1 BFS: 		      10/     127 (0.059125 to BCC_n)
+	BCC num/tot d2 BFS: 		      10/      19 (0.008845 to BCC_n)
+
+	BCC bcc find time: 		0.011378
+	BCC sssp time: 			0.000380
+Inserting edge (4418, 1147) and updating bc...
+	BCC num nodes: 			2149 (0.310235 G_n)
+	BCC num edges: 			7074 (0.596811 G_m)
+
+	Time to update BC: 		1.144224
+	Speedup: 			10.725595
+
+	BCC d1 time: 			0.000546 (1.278317 to naive iter)
+	BCC d2 time: 			0.000481 (1.126827 to naive iter)
+	avg iter time naive: 		0.000427 (1.000000 to naive iter)
+
+	BCC num/tot d0 BFS: 		      37/      37 (0.017217 to BCC_n)
+	BCC num/tot d1 BFS: 		      10/    1967 (0.915309 to BCC_n)
+	BCC num/tot d2 BFS: 		      10/     145 (0.067473 to BCC_n)
+
+	BCC bcc find time: 		0.010934
+	BCC sssp time: 			0.000367
+[[Avg. speedup (fuad): 86.987033]]
+==========================================================
+Graph: 			Erdos972.lcc.net
+Graph # nodes: 		5440
+Graph # edges: 		8940
+WILL DO 10 ITERATIONS...
+Inserting edge (4746, 4332) and updating bc...
+	BCC num nodes: 			1734 (0.318750 G_n)
+	BCC num edges: 			5233 (0.585281 G_m)
+
+	Time to update BC: 		0.435611
+	Speedup: 			14.162694
+
+	BCC d1 time: 			0.000486 (1.566766 to naive iter)
+	BCC d2 time: 			0.000489 (1.576135 to naive iter)
+	avg iter time naive: 		0.000310 (1.000000 to naive iter)
+
+	BCC num/tot d0 BFS: 		     839/     839 (0.483852 to BCC_n)
+	BCC num/tot d1 BFS: 		      10/     819 (0.472318 to BCC_n)
+	BCC num/tot d2 BFS: 		      10/      76 (0.043829 to BCC_n)
+
+	BCC bcc find time: 		0.008838
+	BCC sssp time: 			0.000442
+Inserting edge (4329, 461) and updating bc...
+	BCC num nodes: 			1734 (0.318750 G_n)
+	BCC num edges: 			5234 (0.585328 G_m)
+
+	Time to update BC: 		0.619849
+	Speedup: 			9.953107
+
+	BCC d1 time: 			0.000447 (1.406527 to naive iter)
+	BCC d2 time: 			0.000395 (1.241635 to naive iter)
+	avg iter time naive: 		0.000318 (1.000000 to naive iter)
+
+	BCC num/tot d0 BFS: 		     279/     279 (0.160900 to BCC_n)
+	BCC num/tot d1 BFS: 		      10/     872 (0.502884 to BCC_n)
+	BCC num/tot d2 BFS: 		      10/     583 (0.336217 to BCC_n)
+
+	BCC bcc find time: 		0.008778
+	BCC sssp time: 			0.000356
+Inserting edge (1722, 4587) and updating bc...
+	BCC num nodes: 			1735 (0.318934 G_n)
+	BCC num edges: 			5236 (0.585486 G_m)
+
+	Time to update BC: 		0.423974
+	Speedup: 			14.551420
+
+	BCC d1 time: 			0.000505 (1.553722 to naive iter)
+	BCC d2 time: 			0.000428 (1.316832 to naive iter)
+	avg iter time naive: 		0.000325 (1.000000 to naive iter)
+
+	BCC num/tot d0 BFS: 		     868/     868 (0.500288 to BCC_n)
+	BCC num/tot d1 BFS: 		      10/     686 (0.395389 to BCC_n)
+	BCC num/tot d2 BFS: 		      10/     181 (0.104323 to BCC_n)
+
+	BCC bcc find time: 		0.008419
+	BCC sssp time: 			0.000343
+[[Avg. speedup (fuad): 12.889074]]

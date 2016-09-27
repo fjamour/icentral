@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>src/bc.h</itemPath>
+      <itemPath>src/component_t.h</itemPath>
+      <itemPath>src/experiments.h</itemPath>
+      <itemPath>src/graph_t.h</itemPath>
+      <itemPath>src/iter_info_t.h</itemPath>
+      <itemPath>src/mcb_find.h</itemPath>
+      <itemPath>src/types.h</itemPath>
+      <itemPath>src/unit_tests.h</itemPath>
+      <itemPath>src/utility.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>src/_bc.cc</itemPath>
+      <itemPath>src/_bc_mem.cc</itemPath>
+      <itemPath>src/bc.cc</itemPath>
+      <itemPath>src/bcc_delta.cc</itemPath>
+      <itemPath>src/bcc_scratch.cc</itemPath>
+      <itemPath>src/bicon.cc</itemPath>
+      <itemPath>src/experiments.cc</itemPath>
+      <itemPath>src/graph_hash_t.cc</itemPath>
+      <itemPath>src/graph_t.cc</itemPath>
+      <itemPath>src/iter_info_t.cc</itemPath>
+      <itemPath>src/main.cc</itemPath>
+      <itemPath>src/mcb_find.cc</itemPath>
+      <itemPath>src/paper_exp.cc</itemPath>
+      <itemPath>src/qube.cc</itemPath>
+      <itemPath>src/subgraph_t.cc</itemPath>
+      <itemPath>src/utility.cc</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+          <commandlineTool>mpic++</commandlineTool>
+          <commandLine>-w -pthread -std=c++11</commandLine>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <commandlineTool>mpic++</commandlineTool>
+          <commandLine>-pthread -std=c++11</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="src/_bc.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/_bc_mem.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bc.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/bcc_delta.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bcc_scratch.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bicon.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/component_t.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/experiments.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/experiments.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/graph_hash_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/graph_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/graph_t.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/iter_info_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/iter_info_t.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/main.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/mcb_find.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/mcb_find.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/paper_exp.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/qube.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/subgraph_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/unit_tests.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/utility.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/utility.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <commandLine>-w -pthread -std=c++11</commandLine>
+        </ccTool>
+        <linkerTool>
+          <commandLine>-pthread -std=c++11</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="src/_bc.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/_bc_mem.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bc.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bc.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/bcc_delta.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bcc_scratch.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/bicon.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/component_t.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/experiments.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/experiments.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/graph_hash_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/graph_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/graph_t.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/iter_info_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/iter_info_t.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/main.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/mcb_find.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/mcb_find.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/paper_exp.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/qube.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/subgraph_t.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/types.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/unit_tests.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/utility.cc" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="src/utility.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>2</platform>
+      </toolsSet>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>mpiexec -n 2 "${OUTPUT_PATH}" mpi.in</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 2 "${OUTPUT_PATH}" mpi.in</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 20 "${OUTPUT_PATH}" mpi.in</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 20 "${OUTPUT_PATH}" mpi.in,old</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 20 "${OUTPUT_PATH}" mpi.in,orig</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 20 "${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 20 "${OUTPUT_PATH}" mpi.in.orig</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np  "${OUTPUT_PATH}" mpi.in.orig</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 4 "${OUTPUT_PATH}" mpi.in.orig</runcommandpicklistitem>
+          <runcommandpicklistitem>mpiexec -np 1 "${OUTPUT_PATH}" mpi.in.orig</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>mpiexec -np 1 "${OUTPUT_PATH}" mpi.in.orig</runcommand>
+        <rundir></rundir>
+        <buildfirst>true</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <platform>2</platform>
+      </toolsSet>
+      <dbx_gdbdebugger version="1">
+        <gdb_pathmaps>
+        </gdb_pathmaps>
+        <gdb_interceptlist>
+          <gdbinterceptoptions gdb_all="false" gdb_unhandled="true" gdb_unexpected="true"/>
+        </gdb_interceptlist>
+        <gdb_options>
+          <DebugOptions>
+          </DebugOptions>
+        </gdb_options>
+        <gdb_buildfirst gdb_buildfirst_overriden="false" gdb_buildfirst_old="false"/>
+      </dbx_gdbdebugger>
+      <nativedebugger version="1">
+        <engine>gdb</engine>
+      </nativedebugger>
+      <runprofile version="9">
+        <runcommandpicklist>
+          <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" test_exp.in</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" kdd_exp_1.in</runcommandpicklistitem>
+        </runcommandpicklist>
+        <runcommand>"${OUTPUT_PATH}" kdd_exp_1.in</runcommand>
+        <rundir></rundir>
+        <buildfirst>true</buildfirst>
+        <terminal-type>0</terminal-type>
+        <remove-instrumentation>0</remove-instrumentation>
+        <environment>
+        </environment>
+      </runprofile>
+    </conf>
+  </confs>
+</configurationDescriptor>
