@@ -24,12 +24,6 @@ vector<node_id_t>& subgraph_t::get_nbrs(node_id_t id)
     return nodes_vec[id];
 }
 
-template <typename T>
-void subgraph_t::i_fill_map(vector<T>& vec, T val)
-{
-    vec.resize(nodes_vec.size());
-    fill(vec.begin(), vec.end(), val);
-}
 
 void subgraph_t::init_maps()
 {
