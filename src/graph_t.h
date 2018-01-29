@@ -139,7 +139,10 @@ struct subgraph_t {
     void        find_sssp(node_id_t s, vector<int>& out_vec);
     
     template <typename T>
-    void        i_fill_map(vector<T>& vec, T val);
+    void        i_fill_map(vector<T>& vec, T val){
+        vec.resize(nodes_vec.size());
+        fill(vec.begin(), vec.end(), val);
+    }
     
     void        find_pruning_counts_exp(node_id_t src,
                                         node_id_t dst,
